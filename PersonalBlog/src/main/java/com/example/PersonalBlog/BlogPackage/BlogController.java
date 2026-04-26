@@ -1,10 +1,13 @@
 package com.example.PersonalBlog.BlogPackage;
 
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Validated
 public class BlogController {
 BlogService blogService;
 
@@ -20,7 +23,7 @@ BlogService blogService;
         return blogService.FindById(articleId);
     }
     @PostMapping("/create")
-    public String CreateArticle(@RequestBody Blog blog){
+    public String CreateArticle(@Valid @RequestBody Blog blog){
         blogService.AddNewArticle(blog);
         return "Blog created succesfully";
     }
@@ -30,7 +33,7 @@ BlogService blogService;
         return "Article deleted ";
     }
     @PutMapping("/Update/{articleId}")
-    public String UpdateArticle(@PathVariable int articleId,@RequestBody Blog blog){
+    public String UpdateArticle(@PathVariable int articleId, @Valid @RequestBody Blog blog){
         blogService.update(articleId,blog);
         return "Article updated ";
     }

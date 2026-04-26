@@ -3,6 +3,7 @@ package com.example.PersonalBlog.BlogPackage;
 import com.example.PersonalBlog.Exceptions.NotFound;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -18,8 +19,7 @@ ToDto toDto;
         this.toDto=toDto;
     }
 
-
-
+    
     public List<BlogDTO> getArticles() {
             if(blogRepo.findAll().isEmpty()) throw new NotFound("No data is found ");
         return toDto.toDTOList(blogRepo.findAll());

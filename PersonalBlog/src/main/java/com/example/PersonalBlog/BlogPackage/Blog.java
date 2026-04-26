@@ -1,7 +1,9 @@
 package com.example.PersonalBlog.BlogPackage;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 
@@ -13,7 +15,9 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private Date date;
+    @NotBlank(message = "Title is required")
     private String title;
+    @NotBlank(message = "Can't leave empty")
     private String content;
 
     public Date getDate() {

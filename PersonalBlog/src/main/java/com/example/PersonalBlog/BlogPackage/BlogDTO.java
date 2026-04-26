@@ -1,5 +1,6 @@
 package com.example.PersonalBlog.BlogPackage;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
