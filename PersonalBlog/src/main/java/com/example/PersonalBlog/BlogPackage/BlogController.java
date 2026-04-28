@@ -19,7 +19,7 @@ BlogService blogService;
         return blogService.getArticles();
     }
     @GetMapping("/AritcleById/{articleId}")
-    public BlogDTO ArticleById(@PathVariable int articleId){
+    public BlogDTO ArticleById(@Valid @PathVariable int articleId){
         return blogService.FindById(articleId);
     }
     @PostMapping("/create")
@@ -28,12 +28,12 @@ BlogService blogService;
         return "Blog created succesfully";
     }
     @DeleteMapping("/Delete/{articleId}")
-    public String DeleteArticle(@PathVariable int articleId){
+    public String DeleteArticle(@Valid @PathVariable int articleId){
         blogService.DeleteById(articleId);
         return "Article deleted ";
     }
     @PutMapping("/Update/{articleId}")
-    public String UpdateArticle(@PathVariable int articleId, @Valid @RequestBody Blog blog){
+    public String UpdateArticle(@Valid @PathVariable int articleId, @Valid @RequestBody Blog blog){
         blogService.update(articleId,blog);
         return "Article updated ";
     }
