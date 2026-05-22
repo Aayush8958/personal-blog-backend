@@ -3,7 +3,6 @@ package com.example.PersonalBlog.BlogPackage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 
@@ -19,6 +18,18 @@ public class Blog {
     private String title;
     @NotBlank(message = "Can't leave empty")
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "user_id",nullable = false)
+    private Blog_user author;
+
+    public Blog_user getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Blog_user author) {
+        this.author = author;
+    }
 
     public Date getDate() {
         return date;

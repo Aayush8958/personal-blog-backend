@@ -22,19 +22,19 @@ BlogService blogService;
     public BlogDTO ArticleById(@Valid @PathVariable int articleId){
         return blogService.FindById(articleId);
     }
-    @PostMapping("/create")
-    public String CreateArticle(@Valid @RequestBody Blog blog){
-        blogService.AddNewArticle(blog);
+    @PostMapping("/create/{username}")
+    public String CreateArticle(@Valid @PathVariable String username,@Valid @RequestBody Blog blog){
+        blogService.AddNewArticle(username,blog);
         return "Blog created succesfully";
     }
-    @DeleteMapping("/Delete/{articleId}")
-    public String DeleteArticle(@Valid @PathVariable int articleId){
-        blogService.DeleteById(articleId);
+    @DeleteMapping("/Delete/{username}/{articleId}")
+    public String DeleteArticle(@Valid @PathVariable int articleId,@Valid @PathVariable String username){
+        blogService.DeleteById(articleId,username);
         return "Article deleted ";
     }
-    @PutMapping("/Update/{articleId}")
-    public String UpdateArticle(@Valid @PathVariable int articleId, @Valid @RequestBody Blog blog){
-        blogService.update(articleId,blog);
+    @PutMapping("/Update/{username}/{articleId}")
+    public String UpdateArticle(@Valid @PathVariable int articleId,@Valid @PathVariable String username,  @RequestBody Blog blog){
+        blogService.update(articleId,username,blog);
         return "Article updated ";
     }
 

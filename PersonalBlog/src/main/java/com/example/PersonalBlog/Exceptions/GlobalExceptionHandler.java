@@ -23,6 +23,24 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorbody,HttpStatus.NOT_FOUND);
     }
+    @org.springframework.web.bind.annotation.ExceptionHandler (value = {Forbidden.class})
+    public ResponseEntity<errorBody> HandleForbid(Forbidden forbidden){
+        errorBody errorbody=new errorBody(
+                forbidden.getMessage(),forbidden.getCause(),
+                HttpStatus.FORBIDDEN,null
+        );
+
+        return new ResponseEntity<>(errorbody,HttpStatus.FORBIDDEN);
+    }
+    @org.springframework.web.bind.annotation.ExceptionHandler (value = {AlreadyExists.class})
+    public ResponseEntity<errorBody> HandleExists(AlreadyExists alreadyExists){
+        errorBody errorbody=new errorBody(
+                alreadyExists.getMessage(),alreadyExists.getCause(),
+                HttpStatus.BAD_REQUEST,null
+        );
+
+        return new ResponseEntity<>(errorbody,HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<errorBody> HandleInvalidData(MethodArgumentNotValidException InvalidData){
         Map<String,String> errors=new HashMap<>();

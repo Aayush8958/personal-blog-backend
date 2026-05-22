@@ -1,5 +1,5 @@
 package com.example.PersonalBlog.BlogPackage;
-import org.apache.catalina.User;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,6 +11,5 @@ public interface ToDto {
 
     Blog toEntity(BlogDTO dto);
 
-    @Mapping(target = "id", ignore = true)
     List<BlogDTO> toDTOList(List<Blog> blog);
 }
