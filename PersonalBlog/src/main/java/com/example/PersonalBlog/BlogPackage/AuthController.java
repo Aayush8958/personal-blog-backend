@@ -3,6 +3,7 @@ package com.example.PersonalBlog.BlogPackage;
 import com.example.PersonalBlog.Exceptions.AlreadyExists;
 import com.example.PersonalBlog.Exceptions.Forbidden;
 import com.example.PersonalBlog.Exceptions.NotFound;
+import com.example.PersonalBlog.Security.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,13 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
     UserRepo userRepo;
+    JwtService jwtService;
 
-    public AuthController(UserRepo userRepo) {
+    public AuthController(UserRepo userRepo,JwtService jwtService) {
         this.userRepo = userRepo;
+        this.jwtService=jwtService;
     }
 
     @PostMapping("/Login")
-    public ResponseEntity<String> loginCheck(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> loginCheck(@RequestBody LoginRequest loginRequest){
         if(!userRepo.existsByUsername(loginRequest.getUsername()))
             throw new NotFound("Invalid username or password");
         Blog_user user= userRepo.findByUsername(loginRequest.getUsername());
@@ -29,7 +32,10 @@ public class AuthController {
         boolean password_check= BCrypt.checkpw(loginRequest.getPassword(),user.getPassword());
         if(!password_check)
             throw new Forbidden("Invalid username or password ");
-        return  ResponseEntity.ok("Login complete ");
+
+        String generatedToken= jwtService.generateToken(loginRequest.getUsername());
+
+        return  ResponseEntity.ok(new AuthResponse(generatedToken));
     }
 
 
