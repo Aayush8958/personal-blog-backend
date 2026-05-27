@@ -4,6 +4,7 @@ import com.example.PersonalBlog.Exceptions.AlreadyExists;
 import com.example.PersonalBlog.Exceptions.Forbidden;
 import com.example.PersonalBlog.Exceptions.NotFound;
 import com.example.PersonalBlog.Security.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     UserRepo userRepo;
     JwtService jwtService;
+    RefreshService refreshService;
 
-    public AuthController(UserRepo userRepo,JwtService jwtService) {
+    public AuthController(UserRepo userRepo,JwtService jwtService,RefreshService refreshService) {
         this.userRepo = userRepo;
         this.jwtService=jwtService;
+        this.refreshService=refreshService;
     }
 
     @PostMapping("/Login")
@@ -35,7 +38,24 @@ public class AuthController {
 
         String generatedToken= jwtService.generateToken(loginRequest.getUsername());
 
-        return  ResponseEntity.ok(new AuthResponse(generatedToken));
+        RefreshToken refreshToken = refreshService.createRefreshToken(user.getUsername());
+
+        return  ResponseEntity.ok(new AuthResponse(generatedToken, refreshToken.getToken()));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshAccessToken(@RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        return refreshService.findByToken(requestRefreshToken)
+                .map(refreshService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String newAccessToken = jwtService.generateToken(user.getUsername());
+                    return ResponseEntity.ok(new AuthResponse(newAccessToken, requestRefreshToken));
+                })
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Refresh token is not in database!"));
     }
 
 
