@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-26T20:12:48+0530",
+    date = "2026-05-27T18:15:28+0530",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,7 +21,7 @@ public class ToDtoImpl implements ToDto {
 
         BlogDTO blogDTO = new BlogDTO();
 
-        blogDTO.setAuthor( blog.getAuthor() );
+        blogDTO.setBlog_userDto( toUserDTO( blog.getAuthor() ) );
         blogDTO.setDate( blog.getDate() );
         blogDTO.setTitle( blog.getTitle() );
         blogDTO.setContent( blog.getContent() );
@@ -37,7 +37,6 @@ public class ToDtoImpl implements ToDto {
 
         Blog blog = new Blog();
 
-        blog.setAuthor( dto.getAuthor() );
         blog.setDate( dto.getDate() );
         blog.setTitle( dto.getTitle() );
         blog.setContent( dto.getContent() );
@@ -57,5 +56,19 @@ public class ToDtoImpl implements ToDto {
         }
 
         return list;
+    }
+
+    @Override
+    public Blog_userDto toUserDTO(Blog_user Blog_user) {
+        if ( Blog_user == null ) {
+            return null;
+        }
+
+        Blog_userDto blog_userDto = new Blog_userDto();
+
+        blog_userDto.setId( Blog_user.getId() );
+        blog_userDto.setUsername( Blog_user.getUsername() );
+
+        return blog_userDto;
     }
 }

@@ -11,14 +11,14 @@ public class BlogDTO {
   private    Date date;
   private    String title;
   private    String content;
-  private Blog_user author;
+  private Blog_userDto blog_userDto;
 
-  public void setAuthor(Blog_user author) {
-    this.author = author;
+  public Blog_userDto getBlog_userDto() {
+    return blog_userDto;
   }
 
-  public Blog_user getAuthor() {
-    return author;
+  public void setBlog_userDto(Blog_userDto blog_userDto) {
+    this.blog_userDto = blog_userDto;
   }
 
   public Date getDate() {
